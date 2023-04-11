@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 export function FoodList({ food }) {
   const navigation = useNavigation();
   const handleNavigate = () => {
-    navigation.navigate("Detail");
+    navigation.navigate("Detail", { food });
   };
 
   return (
