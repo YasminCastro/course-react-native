@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "db": "json-server --watch -d 180 --host 192.168.100.9 db.json"
+    "db": "json-server --watch -d 180 --host 192.168.100.5 db.json",
+    "db-glaucia": "json-server --watch -d 180 --host 192.168.1.21 db.json"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.7",
