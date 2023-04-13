@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 export function Search() {
+  const route = useRoute();
   return (
     <View style={styles.container}>
-      <Text>Pagina Buscar!</Text>
+      <Text>{route.params?.name}</Text>
     </View>
   );
 }

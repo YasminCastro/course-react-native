@@ -12,12 +12,20 @@ import { Ionicons } from "@expo/vector-icons";
 import { Logo } from "../../components/logo";
 import api from "../../services/api";
 import { FoodList } from "../../components/foodList";
+import { useNavigation } from "@react-navigation/native";
 
 export function Home() {
   const [inputValue, setInputValue] = useState("");
   const [foods, setFoods] = useState([]);
+  const navigation = useNavigation();
+
   const handleSearch = () => {
-    console.log("VOCÊ CLICOU AQUI");
+    if (!inputValue) {
+      return;
+    }
+
+    setInputValue("");
+    navigation.navigate("Search", { name: inputValue });
   };
 
   useEffect(() => {
