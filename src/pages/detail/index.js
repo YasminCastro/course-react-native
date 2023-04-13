@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Modal,
+  Share,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useLayoutEffect, useState } from "react";
@@ -13,27 +14,61 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Ingredients } from "../../components/ingredients";
 import { Instructions } from "../../components/instructions";
 import { VideoView } from "../../components/video";
+import { saveFavorite, isFavorite, removeFavorite } from "../../utils/storage";
 
 export function Detail() {
   const route = useRoute();
   const navigation = useNavigation();
   const [showVideo, setShowVideo] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+
+  const handleFavoriteReceipe = async (food) => {
+    if (favorite) {
+      await removeFavorite(food.id);
+      setFavorite(false);
+    } else {
+      await saveFavorite(food);
+      setFavorite(true);
+    }
+  };
 
   useLayoutEffect(() => {
+    async function getStatusFavorites() {
+      const receipeFavorites = await isFavorite(route.params?.food);
+      setFavorite(receipeFavorites);
+    }
+
+    getStatusFavorites();
+
     navigation.setOptions({
       title: route.params?.food
         ? route.params.food.name
         : "Detalhes da receita",
       headerRight: () => (
-        <Pressable onPress={() => console.log("TESTANDO")}>
-          <Entypo name="heart" size={28} color="#FF4141" />
+        <Pressable onPress={() => handleFavoriteReceipe(route.params?.food)}>
+          <Entypo
+            name={favorite ? "heart" : "heart-outlined"}
+            size={28}
+            color="#FF4141"
+          />
         </Pressable>
       ),
     });
-  }, [navigation, route.params?.food]);
+  }, [navigation, route.params?.food, favorite]);
 
   const handleOpenVideo = () => {
     setShowVideo(true);
+  };
+
+  const shareRecipe = async () => {
+    try {
+      await Share.share({
+        url: route.params?.food.video,
+        message: `Receita: ${route.params?.food.name}`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -54,7 +89,7 @@ export function Detail() {
             ingredientes ({route.params?.food.total_ingredients})
           </Text>
         </View>
-        <Pressable>
+        <Pressable onPress={shareRecipe}>
           <Feather name="share-2" size={24} color="#121212" />
         </Pressable>
       </View>
