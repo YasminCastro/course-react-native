@@ -5,16 +5,19 @@ import {
   Pressable,
   ScrollView,
   Image,
+  Modal,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Ingredients } from "../../components/ingredients";
 import { Instructions } from "../../components/instructions";
+import { VideoView } from "../../components/video";
 
 export function Detail() {
   const route = useRoute();
   const navigation = useNavigation();
+  const [showVideo, setShowVideo] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -29,9 +32,13 @@ export function Detail() {
     });
   }, [navigation, route.params?.food]);
 
+  const handleOpenVideo = () => {
+    setShowVideo(true);
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <Pressable>
+      <Pressable onPress={handleOpenVideo}>
         <View style={styles.playIcon}>
           <AntDesign name="playcircleo" size={48} color="#FAFAFA" />
         </View>
@@ -63,6 +70,13 @@ export function Detail() {
       {route.params?.food.instructions.map((item) => (
         <Instructions key={item.id} instruction={item} />
       ))}
+
+      <Modal visible={showVideo} animationType="slide">
+        <VideoView
+          handleClose={() => setShowVideo(false)}
+          videoUrl={route.params?.food.video}
+        />
+      </Modal>
     </ScrollView>
   );
 }
