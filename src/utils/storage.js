@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export async function getFavorites(key) {
-  const favortes = await AsyncStorage.getItem(key);
+export async function getFavorites() {
+  const favortes = await AsyncStorage.getItem("@appreceitas");
 
   return JSON.parse(favortes) || [];
 }
