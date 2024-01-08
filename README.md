@@ -12,7 +12,7 @@ Este repositório contém o projeto que desenvolvi como parte de um curso de Rea
 
 ## Tecnologias Utilizadas
 
-- TypeScript
+- JavaScript
 - Expo
 - React Native
 - CSS
